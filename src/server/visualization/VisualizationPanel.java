@@ -37,20 +37,20 @@ public class VisualizationPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (cellSpace != null) { //for editor
-            double tH;
-            if (diffHight != 0) {
-                tH = diffHight / 255;
-            } else {
-                tH = 1;
-            }
+//            double tH;
+//            if (diffHight != 0) {
+//                tH = diffHight / 100;
+//            } else {
+//                tH = 1;
+//            }
             for (int i = 0; i < cellSpace.getHeight(); i++) {
                 for (int j = 0; j < cellSpace.getWidth(); j++) {
                     int layer = (int) slider.getValue() - 1;
                     Color c = null;
-                    if (cellSpace.getValue(i, j, layer) > diffLow) {
-                        c = new Color(255, 0, 0, (int) (cellSpace.getValue(i, j, layer) / tH));
+                    if (cellSpace.getValue(i, j, layer) > diffLow && cellSpace.getValue(i, j, layer) <= diffHight) {
+                        c = new Color(1F, 0F, 0F, (float)(cellSpace.getValue(i, j, layer) / diffHight));
                     } else if (cellSpace.getValue(i, j, layer) == diffLow) {
-                        c = new Color(0, 0, 255, 80);
+                        c = new Color(0F, 0F, 1F, 0.4F);
                     } else {
                         c = Color.BLACK;
                     }

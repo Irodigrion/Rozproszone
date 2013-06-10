@@ -110,6 +110,11 @@ public class MyWindow extends javax.swing.JFrame {
                 startButtonMouseClicked(evt);
             }
         });
+        startButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startButtonActionPerformed(evt);
+            }
+        });
 
         stopButton.setLabel("Stop");
         stopButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -300,11 +305,15 @@ public class MyWindow extends javax.swing.JFrame {
 
     private void setMaxButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_setMaxButtonMouseClicked
         visualizationPanel2.setDiffHight(Double.parseDouble(maxTextField.getText()));
+        simulationController.setMax(Double.parseDouble(maxTextField.getText()));
+        simulationController.reset();
         visualizationPanel2.repaint();
     }//GEN-LAST:event_setMaxButtonMouseClicked
 
     private void setMinButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_setMinButtonMouseClicked
         visualizationPanel2.setDiffLow(Double.parseDouble(minTextField.getText()));
+        simulationController.setMin(Double.parseDouble(minTextField.getText()));
+        simulationController.reset();
         visualizationPanel2.repaint();
     }//GEN-LAST:event_setMinButtonMouseClicked
 
@@ -329,6 +338,11 @@ public class MyWindow extends javax.swing.JFrame {
         simulationController.reset();
         visualizationPanel2.repaint();
     }//GEN-LAST:event_resetButtonMouseClicked
+
+    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_startButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addHostButton;
     private javax.swing.JTextField hostAdressTextField;
