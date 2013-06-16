@@ -120,66 +120,77 @@ public class ServerController {
         int spaceHeight = this.cellSpace.getHeight();
         int part = spaceHeight / nodesCount;
         final ArrayList<Area> tmpAreas = areas;
+        ArrayList<Thread> threadsList = new ArrayList<Thread>();
         try {
-
+            
             for (RemoteNodeInterface node : currentNodesList) {
 
                 final RemoteNodeInterface tmpNode = node;
                 final CellSpace tmpCellSpace = cellSpace;
                 final int tmpPart = part;
+                System.out.println("i na poczatku funkcji: "+i);
                 final int tmpI = i;
+                
                 final int tmpNodesCount = nodesCount;
                 final int tmpSpaceHeight = spaceHeight;
-                ArrayList<Thread> threadsList = new ArrayList<Thread>();
+               // ArrayList<Thread> threadsList = new ArrayList<Thread>();
 
                 //   if (i != nodesCount - 1) {
-                threadsList.add(new Thread(new Runnable() {
+                Thread thr =new Thread(new Runnable() {
 
                     @Override
                     public void run() {
                         try {
                             if (tmpI != tmpNodesCount - 1) {
                                 tmpAreas.add((Area) tmpNode.computeIteration(new Area(tmpCellSpace, tmpPart * tmpI, (tmpPart * (tmpI + 1)))));
+                                 System.out.println("if: tmpI: "+tmpI);
                             } else {
                                 tmpAreas.add((Area) tmpNode.computeIteration(new Area(tmpCellSpace, tmpPart * tmpI, tmpSpaceHeight)));
+                             System.out.println("else: tmpI: "+tmpI);
                             }
 
                             //  tmpAreas.add((Area) tmpNode.computeIteration(new Area(tmpCellSpace, tmpPart * tmpI, (tmpPart * (tmpI + 1)))));
                         } catch (RemoteException ex) {
-                            Logger.getLogger(ServerController.class.getName()).log(Level.SEVERE, null, ex);
+                            System.out.println("Wewnetrzny Remote Exception "+ex.getMessage());
+                          //  Logger.getLogger(ServerController.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
                     }
-                }));
-                //areas.add((Area) node.computeIteration(new Area(this.cellSpace, part * i, (part * (i + 1)))));
-                for (Thread thread : threadsList) {
-                    thread.start();
-
-                }
-
-                for (Thread thread : threadsList) {
-                    thread.join();
-                }
-
-//                } else {
-//                    areas.add((Area) node.computeIteration(new Area(this., part * i, spaceHeight)));
-//                 
-//                }
-                i++;
+                });
+                threadsList.add(thr);
+                
+                i++; 
+                 System.out.println("i na koncu funkcji: "+i);
             }
+            
+            
 
         } catch (Exception remoteException) {
-            remoteException.printStackTrace();
-            return false;
+            System.out.println("Zostal zucony Exception"+remoteException.getMessage());
+            //remoteException.printStackTrace();
+           // return false;
         }
 
+        
+          for (Thread thread : threadsList) 
+          {
+                    System.out.println("Rozmiar listy watkow: "+threadsList.size());
+                    thread.start();
+          }
 
-        for (Area area : tmpAreas) {
+          for (Thread thread : threadsList) {
+               System.out.println("Rozmiar listy watkow w joinie"+threadsList.size());
+           
+               try {
+                thread.join();
+                    } catch (InterruptedException ex) {
+                        System.out.println("Interrupted Exception: "+ex.getMessage());
+                        }
+          }
+
+           for (Area area : tmpAreas) {
             writeAreaToCellSpace(area);
         }
-
-
-
 
         return true;
     }
